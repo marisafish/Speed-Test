@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>スピードテスト</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap");
+html, body {
+  font-family: 'Zen Maru Gothic';
+  font-size: 16px;
+    height: 1965px;  /* 高さ指定 */
+    background: linear-gradient(-225deg, #2CD8D5 0%, #C5C1FF 56%, #FFBAC3 100%);    /* 背景色指定 */
+    background-repeat: no-repeat;
+    background-position:60% 60%;
+    background-size:cover;
+}
+
+.container{
+background-color: #fff;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 350px;
+padding: 0 2em 1em;
+border-radius: 1em;
+line-height: 1.6em;
+box-shadow: 0 1.6em 2.4em rgba(40, 4, 67, 0.3);
+}
+
+.container img{
+width: 100%;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<img src="https://raw.githubusercontent.com/marisafish/Speed-Test/main/%E7%84%A1%E9%A1%8C73_20240401185246.png">
+<p id="info"><span>…</span></p>
+<p id="mbs"><span>速度MB/秒間:</span></p>
+<p id="kbs"><span>速度KB/秒間:</span></p>
+<p id="bits"><span>速度Bit/秒間:</span></p>
+</div>
+<script>
+let startTime, endTime;
+let imageSize = "";
+let image = new Image();
+let bitSpeed = document.getElementById("bits"),
+      kbSpeed = document.getElementById("kbs"),
+      mbSpeed = document.getElementById("mbs"),
+      info = document.getElementById("info");
+
+let totalBitSpeed = 0;
+let totalKbSpeed = 0;
+let totalMbSpeed = 0;
+let numTests = 5;
+let TestCompuleted = 0;
+
+let imageApi = "https://free-icons.net/wp-content/uploads/2022/10/symbol123.png";
+
+image.onload = async function(){
+endtime = new Date().getTime();
+await fetch(imageApi).then((response) =>{
+imageSize = response.headers.get("content-length");
+calculateSpeed();
+});
+};
+
+function calculateSpeed(){
+let timeDuration = (endTime - startTime) / 1000;
+let loadedBits = imageSize * 8;
+let speedInBts = loadedBits / timeDuration;
+let speedInKbs = speedInBts / 1024;
+let speedInMbs = speedInKbs / 1024;
+
+totalBitSpeed += SpeedInBts;
+totalKbSpeed += SpeedInKbs;
+totalMbSpeed += SpeedInMbs;
+
+testComputed++;
+if(testComputed / numtests){
+let averageSpeedInBps = (totalBitSpeed / numtests).toFixed
+(2);
+let averageSpeedInKbps = (totalKbSpeed / numtests).toFixed
+(2);
+let averageSpeedInMbps = (totalMbSpeed / numtests).toFixed
+(2);
+
+bitSpeed.innerHTML += '$(averageSpeedInBps)';
+kbSpeed.innerHTML += '$(averageSpeedInKbps)';
+mbSpeed.innerHTML += '$(averageSpeedInMbps)';
+info.innerHTML = "計測が完了しました。";
+}else{
+startTime = new Date().getTime();
+image.src = imageApi;
+}
+}
+
+const init = async () =>{
+info.innerHTML = "計測しています…";
+startTime = new Date().getTime();
+image.src = imageApi;
+};
+
+window.onload = () =>{
+for (let i = 0; i < numtests; i++){
+init();
+}
+};
+</script>
+</body>
+</html>
